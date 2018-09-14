@@ -5,9 +5,42 @@ class ConvertHandler {
   }
 
   getNum (input) {
-    let result;
-
-    return result;
+    let regex = /^(\d+)?(\.|\/)?(\d+)?(\.|\/)?(\d+)?/;
+    let found = regex.exec(input);
+    let a, b, result;
+    a = Number(found[1]);
+    b = 1;
+    // If not found, test whether there's any non-word character
+    if (!found[0]) {
+      regex = /^\W+/;
+      if (regex.test(input)) { result = NaN; }
+      // If not, default to 1
+      else { result = 1; }
+    }
+    if ((found[2] === '.' && found[4] === '.') || (found[2] === '/' && found[4] === '/')) {
+      result = NaN;
+    } else if (found[2] === '.') {
+      a = Number(found[1] + '.' + found[3]);
+      if (found[4] === '/' && found[5]) {
+        b = Number(found[5]);
+      } else {
+        b = 1;
+      }
+    } else if (found[2] === '/') {
+      a = Number(found[1]);
+      if (found[4] === '.' && found[5]) {
+        b = Number(found[3] + '.' + found[5]);
+      } else if (found[5]) {
+        b = Number(found[5]);
+      } else {
+        b = Number(found[3]);
+      }
+    }
+    if (result === undefined) {
+      result = a / b;
+    }
+    if (isNaN(result)) { return 'invalid number'; }
+    else { return Number(result.toFixed(5)); }
   }
 
   getUnit (input) {

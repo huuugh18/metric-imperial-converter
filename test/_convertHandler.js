@@ -6,6 +6,73 @@ const convertHandler = new ConvertHandler();
 
 describe('Conversion Handler', () => {
 
+  describe('Function convertHandler.getNum(input)', function() {
+
+    it('Whole number input', function(done) {
+      let input = '32L';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal(32);
+      done();
+    });
+
+    it('Decimal Input', function(done) {
+      let input = '1.3mi';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal(1.3);
+      done();
+    });
+
+    it('Fractional Input', function(done) {
+      let input = '1/4Kg';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal(0.25);
+      done();
+    });
+
+    it('Fractional Input w/ Decimal', function(done) {
+      let input = '5/6.5lbs';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal(0.76923);
+      done();
+    });
+
+    it('Decimal Input w/ Fraction', function(done) {
+      let input = '5.6/5lbs';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal(1.12);
+      done();
+    });
+
+    it('Invalid Input (double fraction)', function(done) {
+      let input = '5/2/3Km';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal('invalid number');
+      done();
+    });
+
+    it('Invalid Input (multiple dots)', function(done) {
+      let input = '5.2.3Km';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal('invalid number');
+      done();
+    });
+
+    it('No Numerical Input (blank)', function(done) {
+      let input = 'Km';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal(1);
+      done();
+    });
+
+    it('No Numerical Input (non-alphanumerical char)', function(done) {
+      let input = '-Km';
+      let result = convertHandler.getNum(input);
+      expect(result).to.equal('invalid number');
+      done();
+    });
+
+  });
+
 
   describe('Function convertHandler.convert(num, unit)', () => {
 

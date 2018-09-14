@@ -4,7 +4,6 @@ const expect      = require('chai').expect;
 const cors        = require('cors');
 const path        = require('path');
 
-
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
@@ -13,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 
-app.use('/public', express.static(path.join(process.cwd(), 'public'));
+app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
