@@ -7,6 +7,8 @@ function sanitize (input) {
   // Get only the first input, ignoring the rest
   let sanInput = inputArray[0] ? inputArray[0] : '';
 
-  return sanInput;
+  sanInput = sanInput.replace(/\s+/g, '');
+
+  return sanInput.toLowerCase();
 }
 module.exports = sanitize;

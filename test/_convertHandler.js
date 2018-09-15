@@ -4,6 +4,10 @@ const ConvertHandler = require('../controllers/convertHandler');
 
 const convertHandler = new ConvertHandler();
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max)) + 1;
+}
+
 describe('Conversion Handler', () => {
 
   describe('Function convertHandler.getNum(input)', function() {
@@ -73,8 +77,56 @@ describe('Conversion Handler', () => {
 
   });
 
+  describe('Function convertHandler.getUnit(input)', function() {
 
-  describe('Function convertHandler.convert(num, unit)', () => {
+    it('For Each Valid Unit Inputs', function(done) {
+      let input = ['gal','l','mi','km','lbs','kg','GAL','L','MI','KM','LBS','KG'];
+      input.forEach(function(i) {
+        let input = String(getRandomInt(100)) + i;
+        let result = convertHandler.getUnit(input);
+        expect(result).to.equal(i.toLowerCase());
+      });
+      done();
+    });
+
+    it('Unknown Unit Input', function(done) {
+      let input = '100X';
+      let result = convertHandler.getUnit(input);
+      expect(result).to.equal('invalid unit');
+      done();
+    });
+
+  });
+
+  describe('Function convertHandler.getReturnUnit(initUnit)', function() {
+
+    it('For Each Valid Unit Inputs', function(done) {
+      let input = ['gal','l','mi','km','lbs','kg'];
+      let expected = ['l','gal','km','mi','kg','lbs'];
+      input.forEach(function(ele, i) {
+        let result = convertHandler.getReturnUnit(ele);
+        expect(result).to.equal(expected[i]);
+      });
+      done();
+    });
+
+  });
+
+  describe('Function convertHandler.spellOutUnit(unit)', function() {
+
+    it('For Each Valid Unit Inputs', function(done) {
+      let input = ['gal','l','mi','km','lbs','kg'];
+      let expected = ['gallons','liters','miles','kilometers','pounds','kilograms'];
+      input.forEach(function(ele, i) {
+        let result = convertHandler.spellOutUnit(ele);
+        expect(result).to.equal(expected[i]);
+      });
+      done();
+    });
+
+  });
+
+  describe('Function convertHandler.convert(num, unit)', function() {
 
     it('Gal to L', function(done) {
       let input = [5, 'gal'];
@@ -126,6 +178,17 @@ describe('Conversion Handler', () => {
 
   });
 
+  describe('Function convertHandler.getString(initNum, initUnit, returnNum, returnUnit)', function() {
 
+    it('Formatted output string', function() {
+      let initNum = 300;
+      let initUnit = 'Kg';
+      let returnNum = 661.38732;
+      let returnUnit = 'lbs';
+
+      console.log(`\tResult string:
+        ${convertHandler.getString(initNum, initUnit, returnNum, returnUnit)}`);
+    });
+  });
 
 });

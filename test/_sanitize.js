@@ -1,8 +1,12 @@
-const expect = require('chai').expect;
-const convertHandler = require('../controllers/sanitize');
+const chai = require('chai');
+const expect = chai.expect;
+const sanitize = require('../controllers/sanitize');
 
-describe('Input Sanitizier', () => {
+describe('Input Sanitizier', function() {
 
-
-  xit('should sanitize inputs', () => {});
+  it('should sanitize inputs', function() {
+    let input = '1 L';
+    let result = sanitize(input);
+    expect(result).to.equal('1l');
+  });
 });

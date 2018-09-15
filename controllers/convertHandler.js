@@ -44,20 +44,64 @@ class ConvertHandler {
   }
 
   getUnit (input) {
-    let result;
-
-    return result;
+    let regex = /.*(gal|(?<=[^a-zA-Z])l|mi|km|lbs|kg)$/i;
+    let found = regex.exec(input);
+    if (!found) { return 'invalid unit'; }
+    let result = found[1];
+    return result.toLowerCase();
   }
 
   getReturnUnit (initUnit) {
     let result;
-
+    switch (initUnit.toLowerCase()) {
+      case 'gal':
+        result = 'l';
+        break;
+      case 'l':
+        result = 'gal';
+        break;
+      case 'mi':
+        result = 'km';
+        break;
+      case 'km':
+        result = 'mi';
+        break;
+      case 'lbs':
+        result = 'kg';
+        break;
+      case 'kg':
+        result = 'lbs';
+        break;
+      default:
+        result = 'invalid unit';
+    }
     return result;
   }
 
   spellOutUnit (unit) {
     let result;
-
+    switch (unit.toLowerCase()) {
+      case 'gal':
+        result = 'gallons';
+        break;
+      case 'l':
+        result = 'liters';
+        break;
+      case 'mi':
+        result = 'miles';
+        break;
+      case 'km':
+        result = 'kilometers';
+        break;
+      case 'lbs':
+        result = 'pounds';
+        break;
+      case 'kg':
+        result = 'kilograms';
+        break;
+      default:
+        result = 'invalid unit';
+    }
     return result;
   }
 
@@ -72,23 +116,23 @@ class ConvertHandler {
       numberIsValid = false;
     }
 
-    switch (initUnit) {
+    switch (initUnit.toLowerCase()) {
       case 'gal':
         result *= galToL;
         break;
-      case 'L':
+      case 'l':
         result /= galToL;
         break;
       case 'lbs':
         result *= lbsToKg;
         break;
-      case 'Kg':
+      case 'kg':
         result /= lbsToKg;
         break;
       case 'mi':
         result *= miToKm;
         break;
-      case 'Km':
+      case 'km':
         result /= miToKm;
         break;
       default:
@@ -107,13 +151,9 @@ class ConvertHandler {
   }
 
   getString (initNum, initUnit, returnNum, returnUnit) {
-    let result;
-
+    let result = `${initNum} ${this.spellOutUnit(initUnit)} converts to ${returnNum} ${this.spellOutUnit(returnUnit)}`;
     return result;
   }
 
-  }
-
-
-
+}
 module.exports = ConvertHandler;
