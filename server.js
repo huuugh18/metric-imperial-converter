@@ -3,16 +3,22 @@ const bodyParser  = require('body-parser');
 const expect      = require('chai').expect;
 const cors        = require('cors');
 const path        = require('path');
+const morgan      = require('morgan');
+const helmet      = require('helmet');
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
 
 const port = process.env.PORT || 3000;
+const staticPath = path.join(process.cwd(), 'public');
 
 const app = express();
 
-app.use('/public', express.static(path.join(process.cwd(), 'public')));
+app.use(morgan('short'));
+app.use(helmet());
+
+app.use('/public', express.static(staticPath));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 

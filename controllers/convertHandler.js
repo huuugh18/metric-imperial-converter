@@ -110,11 +110,6 @@ class ConvertHandler {
     const lbsToKg = 0.453592;
     const miToKm = 1.60934;
     let result = Number(initNum);
-    let numberIsValid = true;
-    let unitIsValid = true;
-    if (isNaN(result)) {
-      numberIsValid = false;
-    }
 
     switch (initUnit.toLowerCase()) {
       case 'gal':
@@ -136,22 +131,23 @@ class ConvertHandler {
         result /= miToKm;
         break;
       default:
-        unitIsValid = false;
+        result = NaN;
     }
-
-    if (!numberIsValid && !unitIsValid) {
-      throw new Error('invalid number and unit');
-    } else if (!numberIsValid) {
-      throw new Error('invalid number');
-    } else if (!unitIsValid) {
-      throw new Error('invalid unit');
-    }
-
+    if (isNaN(result)) { return 'invalid number'; }
     return Number(result.toFixed(5));
   }
 
   getString (initNum, initUnit, returnNum, returnUnit) {
-    let result = `${initNum} ${this.spellOutUnit(initUnit)} converts to ${returnNum} ${this.spellOutUnit(returnUnit)}`;
+    let result;
+    if (initNum === 'invalid number' && initUnit === 'invalid unit') {
+      result = 'invalid number and unit';
+    } else if (initNum === 'invalid number') {
+      result = 'invalid number';
+    } else if (initUnit === 'invalid unit') {
+      result = 'invalid unit';
+    } else {
+      result = `${initNum} ${this.spellOutUnit(initUnit)} converts to ${returnNum} ${this.spellOutUnit(returnUnit)}`;
+    }
     return result;
   }
 

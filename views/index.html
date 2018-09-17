@@ -43,7 +43,7 @@
     <hr style='margin: 50px'>
     <div id='testui' style='margin-left: 5%'>
       <h2 style="text-align: left">Front-End:</h2>
-      <form id="convertForm" class="border">
+      <form id="convertForm" class="border"> <!--  method="GET" action="/api/convert"  -->
         <input type="text" id="convertField" name="input" placeholder="3.1mi" style="width: 200px">
         <input id="convert" type="submit" value='Convert!'>
       </form>
@@ -51,13 +51,13 @@
       <code id='jsonResult'></code>
     </div>
     <hr style='margin: 50px; margin-top: 200px'>
-    <!-- Your web-app is https, so your scripts need to be too -->
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+    <!-- <script type="text/javascript" src="./public/script.js"></script> -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
             crossorigin="anonymous"></script>
     <script>
       $(function() {
-        $('#convertForm').submit(function() {
+        $('#convertForm').submit(function(event) {
           event.preventDefault();
           $.ajax({
             url: '/api/convert',
