@@ -5,7 +5,9 @@ class ConvertHandler {
   }
 
   getNum (input) {
+    let result;
     let numeralString = '';
+    // Split input at the unit part
     let charRegex = /[a-z]+$/i;
     let indexOfChar = input.search(charRegex);
     if (indexOfChar >= 0) {
@@ -13,39 +15,18 @@ class ConvertHandler {
     } else {
       numeralString += input;
     }
-    let numRegex = /^(\d+)?(\.|\/)?(\d+)?(\.|\/)?(\d+)?/;
+    // Look for valid numbers
+    let numRegex = /^([0-9]+(\.[0-9]+)?)(\/([0-9]+\.[0-9]+|[1-9]+))?$/;
     let found = numRegex.exec(numeralString);
-    let a, b, result;
-    a = Number(found[1]);
-    b = 1;
-    // If not found, test whether there's any non-word character
-    if (!found[0]) {
-      numRegex = /^\W+/;
-      if (numRegex.test(input)) { result = NaN; }
-      // If not, default to 1
-      else { result = 1; }
-    }
-    if ((found[2] === '.' && found[4] === '.') || (found[2] === '/' && found[4] === '/')) {
-      result = NaN;
-    } else if (found[2] === '.') {
-      a = Number(found[1] + '.' + found[3]);
-      if (found[4] === '/' && found[5]) {
-        b = Number(found[5]);
-      } else {
-        b = 1;
-      }
-    } else if (found[2] === '/') {
-      a = Number(found[1]);
-      if (found[4] === '.' && found[5]) {
-        b = Number(found[3] + '.' + found[5]);
-      } else if (found[5]) {
-        b = Number(found[5]);
-      } else {
-        b = Number(found[3]);
-      }
-    }
-    if (result === undefined) {
+    if (found !== null) {
+      let a = Number(found[1]);
+      let b = found[4] ? Number(found[4]) : 1;
       result = a / b;
+    } else {
+      // If nothing found, check for non-number input
+      let nonRegex = /[^0-9]+/;
+      if (nonRegex.test(numeralString)) { result = NaN; }
+      else { result = 1; }
     }
     if (isNaN(result)) { return 'invalid number'; }
     else { return Number(result.toFixed(5)); }
