@@ -5,15 +5,23 @@ class ConvertHandler {
   }
 
   getNum (input) {
-    let regex = /^(\d+)?(\.|\/)?(\d+)?(\.|\/)?(\d+)?/;
-    let found = regex.exec(input);
+    let numeralString = '';
+    let charRegex = /[a-z]+$/i;
+    let indexOfChar = input.search(charRegex);
+    if (indexOfChar >= 0) {
+      numeralString += input.slice(0, indexOfChar);
+    } else {
+      numeralString += input;
+    }
+    let numRegex = /^(\d+)?(\.|\/)?(\d+)?(\.|\/)?(\d+)?/;
+    let found = numRegex.exec(numeralString);
     let a, b, result;
     a = Number(found[1]);
     b = 1;
     // If not found, test whether there's any non-word character
     if (!found[0]) {
-      regex = /^\W+/;
-      if (regex.test(input)) { result = NaN; }
+      numRegex = /^\W+/;
+      if (numRegex.test(input)) { result = NaN; }
       // If not, default to 1
       else { result = 1; }
     }
@@ -44,8 +52,8 @@ class ConvertHandler {
   }
 
   getUnit (input) {
-    let regex = /.*(gal|(?<=[^a-zA-Z])l|mi|km|lbs|kg)$/i;
-    let found = regex.exec(input);
+    let numRegex = /.*(gal|(?<=[^a-zA-Z])l|mi|km|lbs|kg)$/i;
+    let found = numRegex.exec(input);
     if (!found) { return 'invalid unit'; }
     let result = found[1];
     return result.toLowerCase();
