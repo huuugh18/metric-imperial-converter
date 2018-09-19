@@ -33,10 +33,19 @@ class ConvertHandler {
   }
 
   getUnit (input) {
-    let numRegex = /.*(gal|(?<=[^a-zA-Z])l|mi|km|lbs|kg)$/i;
-    let found = numRegex.exec(input);
-    if (!found) { return 'invalid unit'; }
-    let result = found[1];
+    let result;
+    let charRegex = /[a-z]+$/i;
+    let charString = '';
+    let indexOfChar = input.search(charRegex);
+    if (indexOfChar >= 0) {
+      charString += input.slice(indexOfChar);
+    } else {
+      result = 'invalid unit';
+    }
+    let unitRegex = /^(gal|l|mi|km|lbs|kg)$/i;
+    let found = unitRegex.exec(charString);
+    if (found === null) { result = 'invalid unit'; }
+    else { result = found[1]; }
     return result.toLowerCase();
   }
 
